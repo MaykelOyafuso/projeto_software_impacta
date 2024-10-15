@@ -8,32 +8,50 @@
 </head>
 <body>
     <h1>GERENCIAMENTO DE BIBLIOTECA</h1>
-    
+
     <div id="form-livro">
         <h2>Adicionar Livro no Sistema</h2>
         <form id="form-criar-livro">
-            <label for="tx-titulo">Título do Livro</label>
+            <label for="titulo">Título do Livro</label>
             <input type="text" id="titulo" placeholder="Insira o título do livro" required>
 
-            <label for="tx-autor">Nome do Autor</label>
+            <label for="autor">Nome do Autor</label>
             <input type="text" id="autor" placeholder="Insira o nome do autor" required>
 
-            <label for="tx-editora">Editora</label>
+            <label for="editora">Editora</label>
             <input type="text" id="editora" placeholder="Insira o nome da editora" required>
 
-            <label for="tx-anopublicacao">Ano de Publicação</label>
+            <label for="anopublicacao">Ano de Publicação</label>
             <input type="number" id="anopublicacao" placeholder="Insira o ano de publicação" required>
 
-            <label for="se-opcao">Disponível para empréstimo?</label>
-                <select name="opcao" id="disponibilidade" required>
-                    <option value="1">Sim</option>
-                    <option value="0">Não</option>
-                </select>
+            <label for="disponibilidade">Disponível para empréstimo?</label>
+            <select id="disponibilidade" required>
+                <option value="1">Sim</option>
+                <option value="0">Não</option>
+            </select>
 
-                <button type="submit">Adicionar Livro</button>
+            <button type="submit">Adicionar Livro</button>
         </form>
     </div>
 
-    <script src="static/script.js"></script>
+    <!--button onclick="loadBooks()">Listar Livros</button-->
+    
+    <div id="listarLivros">
+        <h2>Lista de Livros Cadastrados</h2>
+        <table border="1" id="livrosTable">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Editora</th>
+                    <th>Ano de Publicação</th>
+                    <th>Disponibilidade</th>
+                </tr>
+            </thead>
+            <tbody id="livros"></tbody>
+        </table>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script> <!-- Caminho atualizado -->
 </body>
 </html>
