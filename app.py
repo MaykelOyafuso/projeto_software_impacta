@@ -36,6 +36,7 @@ def listar_livros():
     # Transformar em dicionário para JSON serializável
     livros_list = [
         {
+            "ID": livro[0],
             "Titulo": livro[1],
             "Autor": livro[2],
             "Editora": livro[3],
@@ -45,6 +46,22 @@ def listar_livros():
     ]
     
     return jsonify(livros_list)
+
+# Atualizar livro já cadastrado
+@app.route('/atualizarLivro/<int:id>', methods=['PUT'])
+def atualizar_livro(id):
+    data = request.json
+    conn = conexao_banco_dados()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE Livros SET Titulo = ?, Autor = ?, Editora = ?, AnoPublicacao = ?, Disponibilidade = ? WHERE ID = ?",
+        (data['titulo'], data['autor'], data['editora'], data['anopublicacao'], data['disponibilidade'], id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'message': 'Livro atualizado com sucesso!'}), 200
+
 
 # Executa o servidor Flask
 if __name__ == '__main__':

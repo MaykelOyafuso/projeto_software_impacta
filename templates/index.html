@@ -12,6 +12,8 @@
     <div id="form-livro">
         <h2>Adicionar Livro no Sistema</h2>
         <form id="form-criar-livro">
+            <input type="hidden" id="livro-id">
+
             <label for="titulo">Título do Livro</label>
             <input type="text" id="titulo" placeholder="Insira o título do livro" required>
 
@@ -30,7 +32,7 @@
                 <option value="0">Não</option>
             </select>
 
-            <button type="submit">Adicionar Livro</button>
+            <button type="submit" id="submit-button">Adicionar Livro</button>
         </form>
     </div>
 

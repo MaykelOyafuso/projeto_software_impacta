@@ -9,10 +9,16 @@ document.getElementById('form-criar-livro').addEventListener('submit', function 
         anopublicacao: document.getElementById('anopublicacao').value,
         disponibilidade: document.getElementById('disponibilidade').value
     };
+
+    const livroId = document.getElementById('livro-id').value;
+    const isEditing = livroId !== ""; // Verifica se é uma edição
+  
+    const url = isEditing ? `/atualizarLivro/${livroId}` : '/gravarLivro'; // Define a URL da requisição
+    const method = isEditing ? 'PUT' : 'POST'; // Define o método da requisição
   
     // Enviar dados para a aplicação
-    fetch('/gravarLivro', {
-        method: 'POST',
+    fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -20,14 +26,16 @@ document.getElementById('form-criar-livro').addEventListener('submit', function 
     })
     .then(response => response.json())
     .then(data => {
-        alert('Livro adicionado com sucesso!');
+        alert(isEditing ? 'Livro atualizado com sucesso!' : 'Livro adicionado com sucesso!');
         document.getElementById('form-criar-livro').reset();
-        loadBooks();  // Carrega a lista após adicionar
+        document.getElementById('livro-id').value = ""; // Limpa o ID do livro em edição
+        document.getElementById('submit-button').textContent = 'Adicionar Livro'; // Altera o botão para o modo "Adicionar"
+        loadBooks();  // Carrega a lista após adicionar ou atualizar
     })
     .catch(error => console.error('Erro:', error));
-  });
-  
-// Listar livros cadastrados
+});
+
+// Função para carregar livros e incluir botão de edição
 function loadBooks() {
     fetch('/listarLivros')
         .then(response => response.json())
@@ -59,10 +67,30 @@ function loadBooks() {
                 disponibilidadeTd.textContent = Number(livro.Disponibilidade) === 1 ? 'Sim' : 'Não';
                 tr.appendChild(disponibilidadeTd);
 
+                // Botão de edição
+                const actionsTd = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Editar';
+                editButton.onclick = () => fillFormForEdit(livro);
+                actionsTd.appendChild(editButton);
+                tr.appendChild(actionsTd);
+
                 tbody.appendChild(tr);
             });
         })
         .catch(error => console.error('Erro:', error));
 }
 
-loadBooks();  // Carregar a lista de livros ao iniciar
+// Função para preencher o formulário com os dados do livro selecionado para edição
+function fillFormForEdit(livro) {
+    document.getElementById('livro-id').value = livro.ID;
+    document.getElementById('titulo').value = livro.Titulo;
+    document.getElementById('autor').value = livro.Autor;
+    document.getElementById('editora').value = livro.Editora;
+    document.getElementById('anopublicacao').value = livro.AnoPublicacao;
+    document.getElementById('disponibilidade').value = livro.Disponibilidade;
+    document.getElementById('submit-button').textContent = 'Atualizar Livro'; // Altera o botão para o modo "Atualizar"
+}
+
+// Carregar a lista de livros ao iniciar
+loadBooks();
